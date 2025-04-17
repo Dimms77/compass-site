@@ -11,8 +11,94 @@
 <body class="bg-gray-50 text-gray-800 scroll-smooth">
   <section class="min-h-screen flex items-center justify-center flex-col text-center p-6 bg-gradient-to-br from-indigo-100 to-white">
     <h1 class="text-4xl md:text-5xl font-bold mb-4">ИИ-компас решений</h1>
-    <p class="text-xl md:text-2xl text-gray-600 mb-8">Сайт находится на стадии обновления...</p>
-    <p class="text-md text-gray-500">Пожалуйста, подождите. Новая версия будет доступна в ближайшее время.</p>
+    <p class="text-xl md:text-2xl text-gray-600 mb-8">Выбор, которому можно доверять. Путь, который понятен.</p>
+    <a href="#form" class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">Получить совет</a>
   </section>
+
+  <section id="form" class="max-w-3xl mx-auto px-6 py-12">
+    <h2 class="text-2xl font-semibold mb-4 text-center">Получить совет</h2>
+    <textarea id="userInput" rows="4" placeholder="Опиши свою ситуацию..." class="w-full p-4 border border-gray-300 rounded-xl resize-none mb-4"></textarea>
+    <button onclick="handleAdvice()" class="w-full bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700">Получить совет</button>
+    <div id="resultBlock" class="mt-8 hidden">
+      <div class="text-lg font-medium text-green-700 mb-4" id="adviceResult"></div>
+      <div class="flex flex-col md:flex-row gap-4 items-center bg-indigo-50 p-4 rounded-xl shadow">
+        <img id="avatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-16 h-16 rounded-full">
+        <div class="flex-1">
+          <p class="text-sm text-gray-600" id="userLevel">Уровень: Начинающий</p>
+          <div class="w-full bg-gray-300 h-3 rounded-full mt-1">
+            <div id="progressBar" class="bg-indigo-600 h-3 rounded-full transition-all duration-700 ease-in-out" style="width: 0%"></div>
+          </div>
+          <p class="text-sm text-gray-600 mt-1" id="progressText">Прогресс: 0%</p>
+          <p class="text-sm text-gray-800 italic mt-2" id="forecastText">🧭 Прогноз-компас</p>
+        </div>
+      </div>
+      <div class="mt-6 p-4 bg-white border rounded-xl shadow-sm">
+        <h3 class="font-semibold mb-2">🎮 Мини-игра</h3>
+        <p class="text-sm text-gray-600 mb-3">Что ты сделаешь сегодня?</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <button onclick="playGame(1)" class="bg-indigo-100 hover:bg-indigo-200 p-2 rounded">Сделать шаг по плану</button>
+          <button onclick="playGame(2)" class="bg-indigo-100 hover:bg-indigo-200 p-2 rounded">Подумать над смыслом</button>
+          <button onclick="playGame(3)" class="bg-indigo-100 hover:bg-indigo-200 p-2 rounded">Поговорить с близким</button>
+        </div>
+        <p id="gameResponse" class="mt-3 text-indigo-700 font-medium"></p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function handleAdvice() {
+      const input = document.getElementById("userInput").value.toLowerCase();
+      const resultBlock = document.getElementById("resultBlock");
+      const adviceText = document.getElementById("adviceResult");
+      const avatar = document.getElementById("avatarImg");
+      const progress = document.getElementById("progressBar");
+      const progressText = document.getElementById("progressText");
+      const forecast = document.getElementById("forecastText");
+      const level = document.getElementById("userLevel");
+
+      let message = "Ты на правильном пути — уже тем, что ищешь ответ.";
+      let percent = 25;
+      let levelText = "Начинающий";
+      let avatarUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+      let forecastMessage = "Спокойствие и размышления помогут тебе выбрать верный путь.";
+
+      if (input.includes("работа")) {
+        message = "Начни с изучения рынка и постепенных шагов.";
+        percent = 40;
+        levelText = "Исследователь";
+        avatarUrl = "https://cdn-icons-png.flaticon.com/512/1995/1995574.png";
+        forecastMessage = "Путь открывается через терпение.";
+      } else if (input.includes("отношения")) {
+        message = "Разговор с близким человеком может многое прояснить.";
+        percent = 60;
+        levelText = "Сознательный";
+        avatarUrl = "https://cdn-icons-png.flaticon.com/512/1995/1995573.png";
+        forecastMessage = "Тепло и эмпатия помогут тебе сейчас.";
+      } else if (input.includes("страх") || input.includes("боюсь")) {
+        message = "Сделай решительный шаг — даже маленький прыжок — это уже движение.";
+        percent = 80;
+        levelText = "Мастер намерений";
+        avatarUrl = "https://cdn-icons-png.flaticon.com/512/1995/1995575.png";
+        forecastMessage = "Смелость — твой компас сегодня.";
+      }
+
+      adviceText.textContent = message;
+      progress.style.width = percent + "%";
+      progressText.textContent = "Прогресс: " + percent + "%";
+      forecast.textContent = forecastMessage;
+      level.textContent = "Уровень: " + levelText;
+      avatar.src = avatarUrl;
+      resultBlock.classList.remove("hidden");
+    }
+
+    function playGame(opt) {
+      const gameText = {
+        1: "👏 Отлично! Один шаг — уже движение вперёд.",
+        2: "🧘 Хорошо. Рефлексия помогает глубже понять себя.",
+        3: "💬 Связь с близкими — ценный ресурс."
+      };
+      document.getElementById("gameResponse").textContent = gameText[opt];
+    }
+  </script>
 </body>
 </html>
